@@ -1,10 +1,25 @@
 package pkg.vehicules;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "CARS")
 class Car extends Vehicule
 {
+    @Column(name = "NUMBER_OF_DOORS")
     private int number_of_doors;
+
+    @Column(name = "TRUNK_CAPACITY_LITRES")
     private double trunk_capacity;
+
+    @Column(name = "HAS_AIR_CONDITIONING")
     private boolean air_conditioning;
+
+    public Car()
+    {
+        super();
+    }
+
     public Car(String brand, String model, int year, double price, FuelType fuel_type, int number_of_doors, double trunk_capacity, boolean air_conditioning)
     {
         super(brand, model, year, price, fuel_type);

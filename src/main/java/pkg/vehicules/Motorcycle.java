@@ -1,5 +1,7 @@
 package pkg.vehicules;
 
+import jakarta.persistence.*;
+
 enum MotorcycleType {
     SPORT_BIKE,
     CRUISER,
@@ -8,10 +10,22 @@ enum MotorcycleType {
     DIRT_BIKE
 }
 
+@Entity
+@Table(name = "MOTORCYCLES")
 class Motorcycle extends Vehicule
 {
+    @Column(name = "ENGINE_CAPACITY_CC")
     private int engine_capacity;
+
+    @Column(name = "MOTORCYCLE_TYPE")
+    @Enumerated(EnumType.STRING)
     private MotorcycleType type;
+
+    public Motorcycle()
+    {
+        super();
+    }
+
 	public Motorcycle(String brand, String model, int year, double price, FuelType fuel_type, int engine_capacity, MotorcycleType type)
     {
         super(brand, model, year, price, fuel_type);

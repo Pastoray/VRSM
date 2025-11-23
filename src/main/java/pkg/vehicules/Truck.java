@@ -1,9 +1,21 @@
 package pkg.vehicules;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "TRUCKS")
 class Truck extends Vehicule
 {
+    @Column(name = "PAYLOAD_CAPACITY")
     private double payload_capacity;
+
+    @Column(name = "NUMBER_OF_AXLES")
     private int number_of_axles;
+
+    public Truck()
+    {
+        super();
+    }
 	public Truck(String brand, String model, int year, double price, FuelType fuel_type, double payload_capacity, int number_of_axles)
     {
         super(brand, model, year, price, fuel_type);
