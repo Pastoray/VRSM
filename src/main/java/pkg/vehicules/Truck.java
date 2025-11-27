@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "TRUCKS")
-class Truck extends Vehicule
+public class Truck extends Vehicule
 {
     @Column(name = "PAYLOAD_CAPACITY")
     private double payload_capacity;

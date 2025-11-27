@@ -1,43 +1,49 @@
 package pkg.transactions;
 
 import java.time.LocalDate;
-import java.util.Optional;
-
-import pkg.users.Customer;
-import pkg.vehicules.Vehicule;
-
 import java.util.ArrayList;
 import java.util.List;
 
-enum SaleType
-{
-    ONE_TIME,
-    CREDIT
-}
+import jakarta.persistence.*;
+import pkg.users.Customer;
+import pkg.vehicules.Vehicule;
+import pkg.users.Seller;
 
-enum SaleStatus
-{
-    PENDING,
-    COMPLETED,
-    CANCELLED
-}
+@Entity
+public class Sale {
 
-public class Sale
-{
-    private static long g_id = 0;
-    private long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     private LocalDate date;
     private double total_amount;
-    private SaleType type;
-    private Optional<Discount> discount;
-    private Vehicule vehicle;
-    private Customer customer;
     private SaleStatus status;
-    private List<Payment> payments;
 
-    public Sale(Vehicule vehicle, Customer customer, SaleType type, Optional<Discount> discount)
-    {
-        this.id = genID();
+    @ManyToOne
+    private Vehicule vehicle;
+
+    @ManyToOne
+    private Customer customer;
+
+    @Enumerated(EnumType.STRING)
+    private SaleType type;
+
+    @Embedded
+    private Discount discount;
+
+    @ManyToOne
+    private Seller seller;
+
+    @ElementCollection
+    @CollectionTable(name = "sale_payments", joinColumns = @JoinColumn(name = "sale_id"))
+    private List<Payment> payments = new ArrayList<>();
+
+
+    public Sale() {}
+
+
+    public Sale(Vehicule vehicle, Customer customer, SaleType type, Discount discount) {
         this.date = LocalDate.now();
         this.vehicle = vehicle;
         this.customer = customer;
@@ -45,82 +51,55 @@ public class Sale
         this.discount = discount;
         this.total_amount = 0.0;
         this.status = SaleStatus.PENDING;
-        this.payments = new ArrayList<>();
     }
 
-    public void add_payment(Payment payment)
-    {
-        if (this.status != SaleStatus.PENDING)
-        {
-            System.out.println("Sale " + this.id + " is no longer pending...");
+    public void add_payment(Payment payment) {
+        if (status != SaleStatus.PENDING) {
+            System.out.println("Sale " + id + " is no longer pending.");
             return;
         }
 
-        if (this.type == SaleType.ONE_TIME)
-        {
-            if (this.total_amount < payment.get_amount())
-            {
-                System.out.println("Payment failed; Insufficient payment amount. The full sale price must be paid in a single transaction.");
+        if (type == SaleType.ONE_TIME) {
+            if (payment.get_amount() < total_amount) {
+                System.out.println("Payment failed: full amount must be paid at once.");
                 return;
             }
-        }
-        else if (this.type == SaleType.CREDIT)
-        {
-            this.payments.add(payment);
-            double total_payments = this.payments.stream().mapToDouble(Payment::get_amount).sum();
-
-            if (total_payments >= this.total_amount)
-            {
-                this.status = SaleStatus.COMPLETED;
-                System.out.println("Sale " + this.id + " finalized as: " + this.status);
+            payments.add(payment);
+            status = SaleStatus.COMPLETED;
+        } else if (type == SaleType.CREDIT) {
+            payments.add(payment);
+            double paid = payments.stream().mapToDouble(Payment::get_amount).sum();
+            if (paid >= total_amount) {
+                status = SaleStatus.COMPLETED;
             }
         }
+        System.out.println("Sale " + id + " is now: " + status);
     }
 
-    public void cancel_sale()
-    {
-        if (this.status == SaleStatus.PENDING)
-            this.status = SaleStatus.CANCELLED;
+    public void cancel_sale() {
+        if (status == SaleStatus.PENDING) {
+            status = SaleStatus.CANCELLED;
+        }
     }
 
-    public static long genID()
-    {
-        return Sale.g_id++;
+
+    public Long get_id() { return id; }
+    public LocalDate get_date() { return date; }
+    public double get_total_amount() { return total_amount; }
+    public SaleStatus get_status() { return status; }
+    public SaleType get_type() { return type; }
+    public Discount get_discount() { return discount; }
+    public Vehicule get_vehicle() { return vehicle; }
+    public Customer get_customer() { return customer; }
+
+
+    public void set_discount(Discount discount) { this.discount = discount; }
+    public void update_total_amount(double amount) { this.total_amount = amount; }
+    public void set_seller(Seller seller) {
+        this.seller = seller;
     }
 
-    public long get_id() {
-        return id;
-    }
-
-    public LocalDate get_date() {
-        return date;
-    }
-
-    public double get_total_amount() {
-        return total_amount;
-    }
-
-    public SaleType get_type() {
-        return type;
-    }
-
-    public Optional<Discount> get_discount() {
-        return discount;
-    }
-
-    public Vehicule get_vehicle() {
-        return vehicle;
-    }
-
-    public Customer get_customer() {
-        return customer;
-    }
-
-    public void set_discount(Optional<Discount> discount) {
-        this.discount = discount;
-    }
-
-    public void update_total_amount(double new_amount) {
-        this.total_amount = new_amount;
+    public Seller get_seller() {
+        return seller;
     }
 }

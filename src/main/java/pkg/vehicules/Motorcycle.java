@@ -2,17 +2,9 @@ package pkg.vehicules;
 
 import jakarta.persistence.*;
 
-enum MotorcycleType {
-    SPORT_BIKE,
-    CRUISER,
-    TOURING,
-    STANDARD,
-    DIRT_BIKE
-}
-
 @Entity
 @Table(name = "MOTORCYCLES")
-class Motorcycle extends Vehicule
+public class Motorcycle extends Vehicule
 {
     @Column(name = "ENGINE_CAPACITY_CC")
     private int engine_capacity;

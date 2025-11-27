@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "CARS")
-class Car extends Vehicule
+public class Car extends Vehicule
 {
     @Column(name = "NUMBER_OF_DOORS")
     private int number_of_doors;
