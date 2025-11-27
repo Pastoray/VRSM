@@ -8,7 +8,7 @@
         <property name="hibernate.connection.driver_class">com.mysql.cj.jdbc.Driver</property>
         <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/vrsm_db</property>
         <property name="hibernate.connection.username">vrsm_user</property>
-        <property name="hibernate.connection.password"></property>
+        <property name="hibernate.connection.password">vrsm</property>
 
         <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
 

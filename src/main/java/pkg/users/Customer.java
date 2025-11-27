@@ -2,39 +2,31 @@ package pkg.users;
 
 import jakarta.persistence.*;
 
-/**
- * Concrete entity representing a standard Customer user.
- * Mapped to the CUSTOMERS table, joining with the USERS base table.
- */
 @Entity
 @Table(name = "CUSTOMERS")
 public class Customer extends User
 {
+    @Column(name = "BALANCE", nullable = false)
+    private double balance = 0.0;
+
     @Column(name = "ADDRESS")
     private String address;
 
     @Column(name = "PHONE")
-    private String phone; // Using 'phone' as per your latest definition
+    private String phone;
 
     @Column(name = "EMAIL")
     private String email;
 
-    // Use EnumType.STRING to save the enum name (INDIVIDUAL or COMPANY)
+
     @Column(name = "CUSTOMER_TYPE")
     @Enumerated(EnumType.STRING)
     private CustomerType type;
 
-    // MANDATORY FIX: Add no-argument constructor for Hibernate/JPA
-    /**
-     * Required by Hibernate/JPA for instantiation when loading data from the DB.
-     */
     public Customer() {
         super();
     }
 
-    /**
-     * Parameterized constructor for object creation.
-     */
     public Customer(String first_name, String last_name, String login, String password, String address, String phone, String email, CustomerType type)
     {
         super(first_name, last_name, login, password);
@@ -44,7 +36,7 @@ public class Customer extends User
         this.type = type;
     }
 
-    // --- Getters and Setters (Standard Java/JPA naming convention applied) ---
+
 
     public String getAddress() {
         return address;
@@ -76,5 +68,17 @@ public class Customer extends User
 
     public void setType(CustomerType type) {
         this.type = type;
+    }
+
+    public double getBalance() {
+        return balance;
+    }
+
+    public void setBalance(double balance) {
+        this.balance = balance;
+    }
+
+    public void deposit(double amount) {
+        this.balance += amount;
     }
 }

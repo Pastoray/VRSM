@@ -2,19 +2,15 @@ package pkg.users;
 
 import jakarta.persistence.*;
 
-/**
- * Abstract base class for all User types (e.g., Admin, Customer).
- * Uses Joined Inheritance Strategy.
- */
 @Entity
 @Table(name = "USERS")
-@Inheritance(strategy = InheritanceType.JOINED) // Defines how the subclasses map to tables
+@Inheritance(strategy = InheritanceType.JOINED)
 public abstract class User
 {
-    // 1. FIX: Use JPA annotations for ID management
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id; // Use Long for auto-generated IDs
+    private Long id;
 
     @Column(name = "FIRST_NAME")
     private String first_name;
@@ -22,34 +18,30 @@ public abstract class User
     @Column(name = "LAST_NAME")
     private String last_name;
 
-    // The login must be unique and non-null
+
     @Column(name = "LOGIN", unique = true, nullable = false)
     private String login;
 
     @Column(name = "PASSWORD_HASH")
     private String password;
 
-    // 2. MANDATORY FIX: Add no-argument constructor for Hibernate
-    /**
-     * Required by Hibernate/JPA for instantiation when loading data from the DB.
-     */
     public User()
     {
-        // Must be empty!
+
     }
 
-    // Parameterized constructor for object creation (manual ID generation removed)
+
     public User(String first_name, String last_name, String login, String password)
     {
-        // REMOVED: this.id = genID(); -- Let the DB/Hibernate handle the ID
+
         this.first_name = first_name;
         this.last_name = last_name;
         this.login = login;
         this.password = password;
     }
 
-    // 3. REMOVED: static long g_id and genID() are no longer needed.
-    // --- Getters ---
+
+
 
     public Long getId() {
         return id;
@@ -71,9 +63,9 @@ public abstract class User
         return password;
     }
 
-    // --- Setters (Simplified for JPA Compliance) ---
-    // The security logic (if (!(caller instanceof Admin))) must be moved to UserDAO or a UserService.
-    // Hibernate REQUIRES simple setters/field access to populate the object from the database.
+
+
+
 
     public void setId(Long id) {
         this.id = id;

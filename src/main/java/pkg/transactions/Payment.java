@@ -2,50 +2,51 @@ package pkg.transactions;
 
 import java.time.LocalDate;
 
-enum PaymentType
-{
-    CASH,
-    CREDIT_CARD,
-    DEBIT_CARD,
-    BANK_TRANSFER,
-    CHEQUE
-}
+import jakarta.persistence.Embeddable;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 
-class Payment
-{
-    private static long g_id = 0;
-    private long id;
+@Embeddable
+public class Payment {
+
     private double amount;
-   	private LocalDate date;
+    private LocalDate date;
+
+    @Enumerated(EnumType.STRING)
     private PaymentType type;
 
-    public static long genID()
-    {
-        return Payment.g_id++;
+
+    public Payment() {}
+
+
+    public Payment(double amount, PaymentType type) {
+        this.amount = amount;
+        this.type = type;
+        this.date = LocalDate.now();
     }
 
-	public long get_id() {
-		return id;
-	}
-	public void set_id(long id) {
-		this.id = id;
-	}
-	public double get_amount() {
-		return amount;
-	}
-	public void set_amount(double amount) {
-		this.amount = amount;
-	}
-	public LocalDate get_date() {
-		return date;
-	}
-	public void set_date(LocalDate date) {
-		this.date = date;
-	}
-	public PaymentType get_type() {
-		return type;
-	}
-	public void set_type(PaymentType type) {
-		this.type = type;
-	}
+
+    public double get_amount() {
+        return amount;
+    }
+
+    public void set_amount(double amount) {
+        this.amount = amount;
+    }
+
+    public LocalDate get_date() {
+        return date;
+    }
+
+    public void set_date(LocalDate date) {
+        this.date = date;
+    }
+
+    public PaymentType get_type() {
+        return type;
+    }
+
+    public void set_type(PaymentType type) {
+        this.type = type;
+    }
 }
