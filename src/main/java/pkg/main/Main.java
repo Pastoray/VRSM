@@ -32,16 +32,30 @@ public class Main {
         System.out.println("--- Welcome to the VRSM Console System ---");
         System.out.println("Initializing Database Connection...");
 
-        try {
-            HibernateUtil.getSessionFactory();
-            System.out.println("Database connection ready.\n");
-            mainMenu();
-        } catch (Exception e) {
-            System.err.println("FATAL: Could not initialize database. Application cannot run.");
-            e.printStackTrace();
-        } finally {
-            scanner.close();
+        System.out.print("Would you like the (Console/GUI) application: ");
 
+        String option = scanner.nextLine();
+        if (Objects.equals(option.toUpperCase(), "GUI"))
+        {
+            pkg.main.VRSMGUI.launch();
+        }
+        else if (Objects.equals(option.toUpperCase(), "CONSOLE"))
+        {
+            try {
+                HibernateUtil.getSessionFactory();
+                System.out.println("Database connection ready.\n");
+                mainMenu();
+            } catch (Exception e) {
+                System.err.println("Error: Could not initialize database. Application cannot run.");
+                e.printStackTrace();
+            } finally {
+                scanner.close();
+
+            }
+        }
+        else
+        {
+            System.out.println("Unknown option, please choose 'Console' or 'GUI' next time.");
         }
     }
 

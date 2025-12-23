@@ -1,11 +1,14 @@
 .*
 *.class
 
+.project
+.classpath
+.settings/
 .idea/
 .vscode/
 *.iml
 
 *.log
-*.jar
 
 target/
+sub/
