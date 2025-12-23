@@ -3,6 +3,16 @@
 - Java 17+
 
 ## How to Run
+
+### Build locally
+after exctracting the `VRSM_Demo.zip` do the following:
+```cmd
+cd VRSM
+mvn clean compile
+mvn exec:java
+```
+
+### From Github
 The project ships with a precompiled demo (in the preview directory) to avoid complications.
 ```cmd
 git clone https://github.com/Pastoray/VRSM
